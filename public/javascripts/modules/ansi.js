@@ -214,6 +214,11 @@ function ansifilter(data, plaintext, cache) {
 
 var app = angular.module('ansi', []);
 
+function replaceUrlWithHtmlLinks(text) {
+    var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+    return text.replace(exp,"<a style='color:#33aaff; text-decoration: underline' target='_blank' href='$1'>$1</a>"); 
+}
+
 app.filter('ansi', function () {
   return function (input) {
     if (!input) return '';
@@ -226,6 +231,7 @@ app.filter('ansi', function () {
                     .replace(/>/g, '&gt;')
                     .replace(/'/g, '&#39;')
                     .replace(/"/g, '&quot;');
+    text = replaceUrlWithHtmlLinks(text);
     return ansifilter(text);
   }
 });
